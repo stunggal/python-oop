@@ -55,7 +55,6 @@
 # mobil1.hazard_lamp()
 # mobil1.dari_parent()
 
-
 # motor1 = Motor("Honda", "Scopy")
 # motor1.info()
 # motor1.hazard_lamp()
