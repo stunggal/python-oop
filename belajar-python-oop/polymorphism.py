@@ -32,9 +32,9 @@ developer_handal = Programmer("Andi")
 
 # Eksekusi Fungsi
 print("--- Simulasi Hari Kerja (Tanpa Polymorphism) ---")
-simulasikan_kerja_tanpa_poly(karyawan_biasa)   # Output: Budi sedang melakukan pekerjaan umum.
-simulasikan_kerja_tanpa_poly(bos_toko)         # Output: Manager Eko sedang memimpin rapat divisi.
-simulasikan_kerja_tanpa_poly(developer_handal)   # Output: Programmer Andi sedang menulis kode dan memperbaiki bug.
+simulasikan_kerja_tanpa_poly(karyawan_biasa)   
+simulasikan_kerja_tanpa_poly(bos_toko)        
+simulasikan_kerja_tanpa_poly(developer_handal)   
 
 
 # pakai polymorphism
