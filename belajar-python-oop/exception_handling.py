@@ -1,92 +1,178 @@
-# Contoh exception handling di Python: simpel, medium, dan advanced.
+# class Bank():
+#     def __init__(self, name, balance):
+#         self.name = name
+#         self.balance = balance
 
-import contextlib
-import logging
-import time
+#     def withdraw(self, amount):
+#         if amount > self.balance:
+#             raise ValueError("Insufficient funds")
+#         self.balance -= amount
+#         return self.balance
+    
+#     def input_checking(self, amount):
+#         if amount < 0:
+#             raise NameError("Amount must be positive")
+#         self.balance += amount
+#         return self.balance
+    
+# bank = Bank("John Doe", 1000)
+# try:
+#     print(bank.withdraw(1500))
+# except ValueError as e:
+#     print(e)
+# try:    
+#     print(bank.input_checking(-500))
+# except NameError as e:
+#     print(e)
+    
+    
 
-def simple_example():
-	# Contoh sederhana: menangani ZeroDivisionError dan menampilkan else/finally.
-	# ZeroDivisionError adalah salah satu built-in exception untuk pembagian dengan nol.
-	# built-in exception lainnya: FileNotFoundError, ValueError, KeyError, TypeError, dll.
-	print("--- Simple Example ---")
-	try:
-		a = 10
-		b = 0
-		result = a / b
-	except ZeroDivisionError:
-		print("Caught ZeroDivisionError: tidak bisa membagi dengan nol")
-	else:
-		print("Hasil:", result)
-	finally:
-		print("Selesai contoh simpel\n")
+# class BalanceNotEnoughError(Exception):
+#     pass
+
+# class NegativeAmountError(Exception):
+#     pass
+        
+# class IncorrectPasswordError(Exception):
+#     pass
+        
+# class IncorrectAccountNumberError(Exception):
+#     pass
+
+# class Bank():
+#     def __init__(self, name, balance, password, account_number):
+#         self.name = name
+#         self.balance = balance
+#         self.password = password
+#         self.account_number = account_number
+
+#     def withdraw(self, amount, password, account_number):
+#         if password != self.password:
+#             raise IncorrectPasswordError("Incorrect password")
+#         if account_number != self.account_number:
+#             raise IncorrectAccountNumberError("Incorrect account number")
+#         if amount > self.balance:
+#             raise BalanceNotEnoughError("Insufficient funds")
+#         self.balance -= amount
+#         print(f"Withdrawn successfully. Your new balance is {self.balance}")
+    
+#     def input_checking(self, amount):
+#         if amount < 0:
+#             raise NegativeAmountError("Amount must be positive")
+#         self.balance += amount
+#         return self.balance
+    
+#     def check_balance(self, password, account_number):
+#         if password != self.password:
+#             raise IncorrectPasswordError("Incorrect password")
+#         if account_number != self.account_number:
+#             raise IncorrectAccountNumberError("Incorrect account number")
+#         print(f"Your balance is {self.balance}")
+        
+#     def top_up(self, amount, password, account_number):
+#         if amount < 0:
+#             raise NegativeAmountError("Amount must be positive")
+#         if password != self.password:
+#             raise IncorrectPasswordError("Incorrect password")
+#         if account_number != self.account_number:
+#             raise IncorrectAccountNumberError("Incorrect account number")
+#         self.balance += amount
+#         print(f"Top-up successful. Your new balance is {self.balance}")
+    
+# bank = Bank("John Doe", 1000, "password123", "1234567890")
+
+# try:    
+#     Bank.withdraw(bank, 1500, "password123", "1234567890")
+#     Bank.check_balance(bank, "password123", "1234567890")
+#     Bank.top_up(bank, 500, "password123", "1234567890")
+# except BalanceNotEnoughError as e:
+#     print(e)
+# except IncorrectPasswordError as e:
+#     print(e)
+# except IncorrectAccountNumberError as e:
+#     print(e)
+    
+# try:    
+#     Bank.check_balance(bank, "password123", "1234567890")
+#     Bank.top_up(bank, 500, "password123", "1234567890")
+#     Bank.withdraw(bank, 1500, "password123", "1234567890")
+# except BalanceNotEnoughError as e:
+#     print(e)
+# except IncorrectPasswordError as e:
+#     print(e)
+# except IncorrectAccountNumberError as e:
+#     print(e)
 
 
-def _read_number_from_file(path: str) -> int:
-	with open(path, "r") as f:
-		return int(f.read().strip())
+class BalanceNotEnoughError(Exception):
+    pass
 
+class NegativeAmountError(Exception):
+    pass
+        
+class IncorrectPasswordError(Exception):
+    pass
+        
+class IncorrectAccountNumberError(Exception):
+    pass
 
-def medium_example():
-	# Contoh menengah: file I/O, pengecekan nilai, dan beberapa except berbeda.
-	print("--- Medium Example ---")
-	path = "data.txt"
-	try:
-		n = _read_number_from_file(path)
-		if n < 0:
-			raise ValueError("Nilai harus non-negatif")
-		print("Angka dari file:", n)
-	except FileNotFoundError:
-		print(f"File {path} tidak ditemukan — membuat file contoh.")
-		with open(path, "w") as f:
-			f.write("42")
-		print("File dibuat. Jalankan lagi jika ingin membaca nilainya.")
-	except ValueError as e:
-		print("Kesalahan nilai:", e)
-	except Exception as e:
-		print("Kesalahan tidak terduga:", e)
-	else:
-		print("Sukses membaca dan memvalidasi file.")
-	finally:
-		print("Selesai contoh medium\n")
+class Bank():
+    def __init__(self, name, balance, password, account_number):
+        self.name = name
+        self.balance = balance
+        self.password = password
+        self.account_number = account_number
+        
+    def required_checking(self, password, account_number):
+        if password != self.password:
+            raise IncorrectPasswordError("Incorrect password")
+        if account_number != self.account_number:
+            raise IncorrectAccountNumberError("Incorrect account number")
 
-class DatabaseConnectionError(Exception):
-	pass
+    def withdraw(self, amount, password, account_number):
+        self.required_checking(password, account_number)
+        if amount > self.balance:
+            raise BalanceNotEnoughError("Insufficient funds")
+        self.balance -= amount
+        print(f"Withdrawn successfully. Your new balance is {self.balance}")
+    
+    def input_checking(self, amount):
+        if amount < 0:
+            raise NegativeAmountError("Amount must be positive")
+        self.balance += amount
+        return self.balance
+    
+    def check_balance(self, password, account_number):
+        self.required_checking(password, account_number)
+        print(f"Your balance is {self.balance}")
+        
+    def top_up(self, amount, password, account_number):
+        self.required_checking(password, account_number)
+        if amount < 0:
+            raise NegativeAmountError("Amount must be positive")
+        self.balance += amount
+        print(f"Top-up successful. Your new balance is {self.balance}")
+    
+bank = Bank("John Doe", 1000, "password123", "1234567890")
 
-def _connect_to_db_sim(retries: int = 3):
-	"""
-	Simulasi koneksi DB dengan retry. Pada percobaan gagal, melempar ConnectionError.
-	Jika semua percobaan gagal, melempar DatabaseConnectionError (raise from untuk chaining).
-	"""
-	for attempt in range(1, retries + 1):
-		try:
-			if attempt < retries:
-				raise ConnectionError("timeout")
-			return "koneksi-terbuka"
-		except ConnectionError as e:
-			logging.warning("Attempt %d gagal: %s", attempt, e)
-			if attempt == retries:
-				raise DatabaseConnectionError("Gagal koneksi setelah beberapa percobaan") from e
-			time.sleep(0.1)
-
-def advanced_example():
-	# Contoh advanced: custom exception, exception chaining, dan contextlib.suppress.
-	print("--- Advanced Example ---")
-	try:
-		conn = _connect_to_db_sim(retries=3)
-	except DatabaseConnectionError as e:
-		print("Tidak bisa terhubung ke DB:", e)
-		if e.__cause__:
-			print("Penyebab asli (chained):", repr(e.__cause__))
-	else:
-		print("Terhubung:", conn)
-
-	# contoh penggunaan contextlib.suppress untuk mengabaikan exception yang diharapkan
-	with contextlib.suppress(FileNotFoundError):
-		open("no-such-file.txt").close()
-
-	print("Selesai contoh advanced\n")
-
-simple_example()
-medium_example()
-advanced_example()
-
+try:    
+    Bank.withdraw(bank, 1500, "password123", "1234567890")
+    Bank.check_balance(bank, "password123", "1234567890")
+    Bank.top_up(bank, 500, "password123", "1234567890")
+except BalanceNotEnoughError as e:
+    print(e)
+except IncorrectPasswordError as e:
+    print(e)
+except IncorrectAccountNumberError as e:
+    print(e)
+    
+try:    
+    Bank.check_balance(bank, "password123", "1234567890")
+    Bank.top_up(bank, 500, "password123", "1234567890")
+    Bank.withdraw(bank, 1500, "password123", "1234567890")
+except BalanceNotEnoughError as e:
+    print(e)
+except IncorrectPasswordError as e:
+    print(e)
+except IncorrectAccountNumberError as e:
+    print(e)
